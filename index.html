@@ -1,23 +1,878 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-              <title>aaiku.in</title>
-                  <style>
-                        body {
-                                margin: 0;
-                                        display: flex;
-                                                justify-content: center;
-                                                        align-items: center;
-                                                                height: 100vh;
-                                                                        background: #f0f4f8;
-                                                                                font-family: Arial, sans-serif;
-                                                                                      }
-                                                                                            h1 { font-size: 3rem; color: #333; }
-                                                                                                </style>
-                                                                                                  </head>
-                                                                                                    <body>
-                                                                                                        <h1>Hello World!</h1>
-                                                                                                          </body>
-                                                                                                          </html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AAIKU — Fine Jewellery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8D5A0;
+      --gold-dark: #8B6914;
+      --black: #0A0A0A;
+      --dark: #111111;
+      --dark2: #1A1A1A;
+      --dark3: #222222;
+      --white: #FAFAF7;
+      --gray: #888888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 60px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
+      backdrop-filter: blur(2px);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 300; letter-spacing: 10px;
+      color: var(--gold); text-decoration: none; text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-size: 11px; font-weight: 500; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--white); text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, #1a1205 0%, #0A0A0A 70%);
+    }
+    .hero-particles {
+      position: absolute; inset: 0; overflow: hidden;
+    }
+    .particle {
+      position: absolute; border-radius: 50%;
+      background: var(--gold); opacity: 0;
+      animation: sparkle 4s infinite;
+    }
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 0.6; transform: scale(1); }
+    }
+    .hero-ring {
+      position: absolute;
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 50%;
+      animation: rotate 30s linear infinite;
+    }
+    .ring1 { width: 600px; height: 600px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .ring2 { width: 800px; height: 800px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-direction: reverse; animation-duration: 45s; }
+    .ring3 { width: 1000px; height: 1000px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-duration: 60s; }
+    @keyframes rotate { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+    .hero-content {
+      position: relative; text-align: center; z-index: 2;
+      padding: 0 20px;
+    }
+    .hero-tagline {
+      font-size: 11px; letter-spacing: 6px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 24px; font-weight: 400;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(64px, 10vw, 130px);
+      font-weight: 300; line-height: 1;
+      letter-spacing: 20px; text-transform: uppercase;
+      color: var(--white); margin-bottom: 8px;
+    }
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(16px, 3vw, 24px);
+      font-weight: 300; font-style: italic;
+      color: var(--gold-light); letter-spacing: 4px;
+      margin-bottom: 48px;
+    }
+    .hero-divider {
+      width: 80px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 0 auto 48px;
+    }
+    .hero-desc {
+      font-size: 13px; letter-spacing: 2px; line-height: 2;
+      color: rgba(250,250,247,0.6); max-width: 480px; margin: 0 auto 56px;
+      font-weight: 300;
+    }
+    .hero-cta {
+      display: inline-block; padding: 16px 52px;
+      border: 1px solid var(--gold); color: var(--gold);
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      text-decoration: none; font-weight: 500;
+      transition: all 0.4s ease;
+      position: relative; overflow: hidden;
+    }
+    .hero-cta::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--gold); transform: translateX(-100%);
+      transition: transform 0.4s ease; z-index: -1;
+    }
+    .hero-cta:hover { color: var(--black); }
+    .hero-cta:hover::before { transform: translateX(0); }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      background: var(--gold); overflow: hidden;
+      padding: 14px 0;
+    }
+    .marquee-track {
+      display: flex; gap: 0;
+      animation: marquee 20s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-track span {
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--black); font-weight: 600; padding: 0 40px;
+    }
+    .marquee-track span::before {
+      content: '✦'; margin-right: 40px; font-size: 8px;
+    }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 120px 60px; }
+    .section-label {
+      font-size: 10px; letter-spacing: 6px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px; font-weight: 500;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 300; line-height: 1.1;
+      color: var(--white); margin-bottom: 24px;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .gold-line {
+      width: 60px; height: 1px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      margin-bottom: 32px;
+    }
+
+    /* ── ABOUT ── */
+    .about { background: var(--dark); }
+    .about-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 100px;
+      align-items: center;
+    }
+    .about-visual {
+      position: relative; display: flex; align-items: center; justify-content: center;
+    }
+    .about-diamond {
+      width: 280px; height: 280px;
+      background: linear-gradient(135deg, #1a1a0a, #2a2205, #1a1a0a);
+      border: 1px solid rgba(201,168,76,0.3);
+      transform: rotate(45deg);
+      position: relative;
+      box-shadow: 0 0 60px rgba(201,168,76,0.1), inset 0 0 40px rgba(201,168,76,0.05);
+    }
+    .about-diamond::before {
+      content: '◆';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%) rotate(-45deg);
+      font-size: 80px; color: var(--gold); opacity: 0.6;
+    }
+    .about-diamond-orbit {
+      position: absolute; width: 360px; height: 360px;
+      border: 1px dashed rgba(201,168,76,0.2);
+      border-radius: 50%; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      animation: rotate 15s linear infinite;
+    }
+    .about-diamond-orbit::before {
+      content: '✦'; position: absolute; top: -6px; left: 50%;
+      transform: translateX(-50%); color: var(--gold); font-size: 12px;
+    }
+    .about-text p {
+      font-size: 14px; line-height: 2.2; color: rgba(250,250,247,0.65);
+      margin-bottom: 20px; font-weight: 300; letter-spacing: 0.5px;
+    }
+    .about-stats {
+      display: flex; gap: 48px; margin-top: 48px; padding-top: 48px;
+      border-top: 1px solid rgba(201,168,76,0.2);
+    }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px; font-weight: 300; color: var(--gold); line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gray); font-weight: 500;
+    }
+
+    /* ── COLLECTIONS ── */
+    .collections { background: var(--black); }
+    .collections-header {
+      max-width: 1200px; margin: 0 auto 80px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .collections-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    }
+    .collection-card {
+      position: relative; overflow: hidden; cursor: pointer;
+      aspect-ratio: 3/4;
+      background: var(--dark2);
+    }
+    .collection-card.large { grid-row: span 2; aspect-ratio: auto; }
+    .card-bg {
+      position: absolute; inset: 0;
+      transition: transform 0.8s ease;
+    }
+    .collection-card:hover .card-bg { transform: scale(1.08); }
+    /* Individual card gradients mimicking jewelry */
+    .card-ring .card-bg {
+      background: radial-gradient(ellipse at 40% 40%, #2a1f05 0%, #100c00 50%, #0a0804 100%);
+    }
+    .card-necklace .card-bg {
+      background: radial-gradient(ellipse at 60% 30%, #1a1505 0%, #0d0b00 50%, #080700 100%);
+    }
+    .card-earring .card-bg {
+      background: radial-gradient(ellipse at 50% 50%, #1e1705 0%, #100d00 60%, #080600 100%);
+    }
+    .card-bracelet .card-bg {
+      background: radial-gradient(ellipse at 30% 60%, #1a1303 0%, #0d0a00 50%, #090700 100%);
+    }
+    .card-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 80px; opacity: 0.15;
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    .collection-card:hover .card-icon {
+      opacity: 0.25; transform: translate(-50%, -55%) scale(1.1);
+    }
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
+    }
+    .card-content {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 40px 32px;
+      transform: translateY(20px); opacity: 0.8;
+      transition: transform 0.4s, opacity 0.4s;
+    }
+    .collection-card:hover .card-content { transform: translateY(0); opacity: 1; }
+    .card-cat {
+      font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 300; color: var(--white); margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 12px; color: rgba(250,250,247,0.55); letter-spacing: 1px;
+      line-height: 1.8; font-weight: 300;
+    }
+    .card-price {
+      font-size: 13px; color: var(--gold-light); margin-top: 16px;
+      font-family: 'Cormorant Garamond', serif; font-size: 20px;
+    }
+
+    /* ── FEATURED PIECE ── */
+    .featured {
+      background: var(--dark2);
+      padding: 0;
+    }
+    .featured-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+    }
+    .featured-visual {
+      background: radial-gradient(ellipse at 50% 50%, #1e1700 0%, #0a0800 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .diamond-showcase {
+      position: relative; text-align: center;
+    }
+    .diamond-big {
+      font-size: 160px; line-height: 1;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 40px rgba(201,168,76,0.4));
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    .diamond-glow {
+      position: absolute; inset: -40px;
+      background: radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.15), transparent 70%);
+      border-radius: 50%;
+    }
+    .featured-content {
+      padding: 100px 80px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .featured-badge {
+      display: inline-block; padding: 6px 16px;
+      border: 1px solid var(--gold); color: var(--gold);
+      font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+      margin-bottom: 32px; font-weight: 500;
+    }
+    .featured-content p {
+      font-size: 14px; line-height: 2.2;
+      color: rgba(250,250,247,0.6); font-weight: 300;
+      margin-bottom: 16px; letter-spacing: 0.5px;
+    }
+    .featured-specs {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 24px; margin: 40px 0;
+      padding: 32px; border: 1px solid rgba(201,168,76,0.2);
+      background: rgba(201,168,76,0.03);
+    }
+    .spec-item {}
+    .spec-key {
+      font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gray); margin-bottom: 6px;
+    }
+    .spec-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; color: var(--gold-light);
+    }
+    .featured-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px; color: var(--gold); margin-bottom: 32px;
+    }
+    .btn-gold {
+      display: inline-block; padding: 16px 52px;
+      background: var(--gold); color: var(--black);
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      text-decoration: none; font-weight: 600; cursor: pointer;
+      border: none; transition: background 0.3s;
+    }
+    .btn-gold:hover { background: var(--gold-light); }
+
+    /* ── PROCESS ── */
+    .process { background: var(--dark); }
+    .process-inner { max-width: 1200px; margin: 0 auto; }
+    .process-header { text-align: center; margin-bottom: 80px; }
+    .process-header .gold-line { margin: 0 auto 32px; width: 60px; }
+    .process-steps {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 40px; position: relative;
+    }
+    .process-steps::before {
+      content: ''; position: absolute;
+      top: 36px; left: 12%; right: 12%; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), var(--gold), transparent);
+      opacity: 0.3;
+    }
+    .step { text-align: center; }
+    .step-num {
+      width: 72px; height: 72px; border-radius: 50%;
+      border: 1px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 300; color: var(--gold);
+      background: var(--dark);
+      position: relative; z-index: 1;
+    }
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 400; color: var(--white); margin-bottom: 12px;
+    }
+    .step-desc {
+      font-size: 12px; line-height: 2; color: var(--gray);
+      font-weight: 300; letter-spacing: 0.3px;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: var(--black); }
+    .testimonials-inner { max-width: 1200px; margin: 0 auto; }
+    .testimonials-header { margin-bottom: 60px; }
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+    }
+    .testi-card {
+      padding: 40px 36px;
+      border: 1px solid rgba(201,168,76,0.15);
+      background: rgba(201,168,76,0.02);
+      position: relative;
+    }
+    .testi-card::before {
+      content: '"';
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 80px; font-weight: 300; color: var(--gold);
+      opacity: 0.3; position: absolute; top: 16px; left: 28px;
+      line-height: 1;
+    }
+    .testi-stars {
+      color: var(--gold); letter-spacing: 4px; font-size: 12px;
+      margin-bottom: 20px;
+    }
+    .testi-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px; font-weight: 300; font-style: italic;
+      line-height: 1.8; color: rgba(250,250,247,0.8);
+      margin-bottom: 28px;
+    }
+    .testi-author {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .testi-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 1px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px; color: var(--gold);
+      background: rgba(201,168,76,0.1);
+    }
+    .testi-name {
+      font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--white); font-weight: 500;
+    }
+    .testi-city {
+      font-size: 11px; color: var(--gray); letter-spacing: 1px; margin-top: 2px;
+    }
+
+    /* ── CONTACT / CTA ── */
+    .cta {
+      background: var(--dark2);
+      text-align: center; padding: 140px 60px;
+    }
+    .cta-inner { max-width: 720px; margin: 0 auto; }
+    .cta p {
+      font-size: 14px; line-height: 2.2;
+      color: rgba(250,250,247,0.6); font-weight: 300;
+      margin-bottom: 48px; letter-spacing: 0.5px;
+    }
+    .cta-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .btn-outline {
+      display: inline-block; padding: 16px 48px;
+      border: 1px solid rgba(250,250,247,0.3); color: var(--white);
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      text-decoration: none; font-weight: 500; transition: all 0.3s;
+    }
+    .btn-outline:hover {
+      border-color: var(--gold); color: var(--gold);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black); padding: 80px 60px 40px;
+      border-top: 1px solid rgba(201,168,76,0.15);
+    }
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px; max-width: 1200px; margin: 0 auto 60px;
+    }
+    .footer-brand p {
+      font-size: 12px; line-height: 2.2; color: var(--gray);
+      font-weight: 300; margin-top: 20px; max-width: 280px;
+    }
+    .footer-col h4 {
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 24px; font-weight: 500;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li {
+      font-size: 13px; color: var(--gray); margin-bottom: 12px;
+      font-weight: 300; letter-spacing: 0.5px; cursor: pointer;
+      transition: color 0.3s;
+    }
+    .footer-col ul li:hover { color: var(--gold-light); }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 32px; border-top: 1px solid rgba(201,168,76,0.1);
+    }
+    .footer-copy {
+      font-size: 12px; color: rgba(136,136,136,0.6);
+      letter-spacing: 1px;
+    }
+    .footer-socials { display: flex; gap: 20px; }
+    .footer-socials a {
+      width: 36px; height: 36px; border: 1px solid rgba(201,168,76,0.3);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 14px; text-decoration: none;
+      transition: all 0.3s;
+    }
+    .footer-socials a:hover {
+      background: var(--gold); color: var(--black);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      section { padding: 80px 24px; }
+      .about-inner { grid-template-columns: 1fr; gap: 60px; }
+      .about-visual { display: none; }
+      .collections-grid { grid-template-columns: 1fr 1fr; }
+      .collection-card.large { grid-row: span 1; }
+      .featured-inner { grid-template-columns: 1fr; }
+      .featured-visual { min-height: 50vh; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .process-steps::before { display: none; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .collections-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .featured-content { padding: 60px 32px; }
+    }
+    @media (max-width: 600px) {
+      .collections-grid { grid-template-columns: 1fr; }
+      .hero-title { letter-spacing: 10px; }
+      .about-stats { flex-direction: column; gap: 24px; }
+      .process-steps { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .featured-specs { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="#" class="nav-logo">Aaiku</a>
+    <ul class="nav-links">
+      <li><a href="#collections">Collections</a></li>
+      <li><a href="#about">Our Story</a></li>
+      <li><a href="#process">Craftsmanship</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-particles">
+      <div class="particle" style="width:3px;height:3px;top:20%;left:15%;animation-delay:0s;animation-duration:3s;"></div>
+      <div class="particle" style="width:2px;height:2px;top:35%;left:80%;animation-delay:0.8s;animation-duration:4s;"></div>
+      <div class="particle" style="width:4px;height:4px;top:65%;left:25%;animation-delay:1.5s;animation-duration:3.5s;"></div>
+      <div class="particle" style="width:2px;height:2px;top:75%;left:70%;animation-delay:2s;animation-duration:5s;"></div>
+      <div class="particle" style="width:3px;height:3px;top:50%;left:90%;animation-delay:0.5s;animation-duration:4.5s;"></div>
+      <div class="particle" style="width:2px;height:2px;top:15%;left:55%;animation-delay:1s;animation-duration:3s;"></div>
+      <div class="particle" style="width:4px;height:4px;top:85%;left:40%;animation-delay:2.5s;animation-duration:6s;"></div>
+      <div class="particle" style="width:2px;height:2px;top:45%;left:5%;animation-delay:1.8s;animation-duration:4s;"></div>
+    </div>
+    <div class="hero-ring ring1"></div>
+    <div class="hero-ring ring2"></div>
+    <div class="hero-ring ring3"></div>
+    <div class="hero-content">
+      <p class="hero-tagline">Fine Jewellery Since 2010</p>
+      <h1 class="hero-title">AAIKU</h1>
+      <p class="hero-subtitle">Where Gold Meets Artistry</p>
+      <div class="hero-divider"></div>
+      <p class="hero-desc">Exquisite gold and diamond jewellery, handcrafted for those who appreciate the extraordinary.</p>
+      <a href="#collections" class="hero-cta">Explore Collections</a>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>Gold Jewellery</span>
+      <span>Diamond Rings</span>
+      <span>Bridal Collection</span>
+      <span>Custom Design</span>
+      <span>Fine Craftsmanship</span>
+      <span>Certified Diamonds</span>
+      <span>Gold Jewellery</span>
+      <span>Diamond Rings</span>
+      <span>Bridal Collection</span>
+      <span>Custom Design</span>
+      <span>Fine Craftsmanship</span>
+      <span>Certified Diamonds</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-visual">
+        <div class="about-diamond"></div>
+        <div class="about-diamond-orbit"></div>
+      </div>
+      <div class="about-text">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">Born from a <em>Passion</em><br>for Perfection</h2>
+        <div class="gold-line"></div>
+        <p>Aaiku was founded with a singular vision — to create jewellery that transcends time. Each piece is a celebration of India's rich goldsmithing heritage, reimagined for the modern connoisseur.</p>
+        <p>We source only conflict-free, certified diamonds and the finest 18K and 22K gold, ensuring that every Aaiku creation is not just beautiful, but ethically impeccable.</p>
+        <p>From bridal masterpieces to everyday elegance, our artisans pour hundreds of hours of skill into each creation, producing jewellery that becomes part of your story.</p>
+        <div class="about-stats">
+          <div>
+            <div class="stat-num">15+</div>
+            <div class="stat-label">Years of Excellence</div>
+          </div>
+          <div>
+            <div class="stat-num">5K+</div>
+            <div class="stat-label">Happy Clients</div>
+          </div>
+          <div>
+            <div class="stat-num">200+</div>
+            <div class="stat-label">Unique Designs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTIONS -->
+  <section class="collections" id="collections">
+    <div class="collections-header">
+      <div>
+        <p class="section-label">Our Creations</p>
+        <h2 class="section-title">The <em>Collections</em></h2>
+      </div>
+      <a href="#contact" class="btn-outline">View All Pieces</a>
+    </div>
+    <div class="collections-grid">
+      <div class="collection-card card-ring large">
+        <div class="card-bg"></div>
+        <div class="card-icon">💍</div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <p class="card-cat">Signature Collection</p>
+          <h3 class="card-name">Solitaire Rings</h3>
+          <p class="card-desc">Single diamond masterpieces set in lustrous 18K gold. The purest expression of love.</p>
+          <p class="card-price">From ₹ 45,000</p>
+        </div>
+      </div>
+      <div class="collection-card card-necklace">
+        <div class="card-bg"></div>
+        <div class="card-icon">📿</div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <p class="card-cat">Statement Pieces</p>
+          <h3 class="card-name">Gold Necklaces</h3>
+          <p class="card-desc">22K gold necklaces that drape in elegance. From delicate chains to grand statement pieces.</p>
+          <p class="card-price">From ₹ 38,000</p>
+        </div>
+      </div>
+      <div class="collection-card card-earring">
+        <div class="card-bg"></div>
+        <div class="card-icon">✨</div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <p class="card-cat">Everyday Luxury</p>
+          <h3 class="card-name">Diamond Earrings</h3>
+          <p class="card-desc">Certified diamond earrings — studs, drops, and chandeliers — for every occasion.</p>
+          <p class="card-price">From ₹ 22,000</p>
+        </div>
+      </div>
+      <div class="collection-card card-bracelet">
+        <div class="card-bg"></div>
+        <div class="card-icon">⭐</div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <p class="card-cat">Wrist Adornment</p>
+          <h3 class="card-name">Gold Bangles</h3>
+          <p class="card-desc">Handcrafted 22K gold bangles, available in traditional and contemporary designs.</p>
+          <p class="card-price">From ₹ 55,000</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PIECE -->
+  <section class="featured">
+    <div class="featured-inner">
+      <div class="featured-visual">
+        <div class="diamond-glow"></div>
+        <div class="diamond-showcase">
+          <div class="diamond-big">◆</div>
+        </div>
+      </div>
+      <div class="featured-content">
+        <span class="featured-badge">✦ Signature Piece</span>
+        <p class="section-label">Editor's Choice</p>
+        <h2 class="section-title">The <em>Lumière</em><br>Diamond Ring</h2>
+        <div class="gold-line"></div>
+        <p>The Lumière is Aaiku's most celebrated creation — a 1.5 carat round brilliant diamond, GIA certified, cradled in a hand-engraved 18K white gold setting adorned with micro-pavé accent diamonds.</p>
+        <p>Each Lumière is made to order, ensuring your ring is truly one of a kind. Our master craftsmen take up to 40 hours to bring this vision to life.</p>
+        <div class="featured-specs">
+          <div class="spec-item">
+            <div class="spec-key">Diamond</div>
+            <div class="spec-val">1.5 Ct Round Brilliant</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-key">Clarity</div>
+            <div class="spec-val">VS1 — Excellent</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-key">Metal</div>
+            <div class="spec-val">18K White Gold</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-key">Certification</div>
+            <div class="spec-val">GIA Certified</div>
+          </div>
+        </div>
+        <div class="featured-price">₹ 2,85,000</div>
+        <a href="#contact" class="btn-gold">Inquire Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process" id="process">
+    <div class="process-inner">
+      <div class="process-header">
+        <p class="section-label">The Aaiku Way</p>
+        <h2 class="section-title">Crafted with <em>Intention</em></h2>
+        <div class="gold-line"></div>
+      </div>
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Design Consultation</h3>
+          <p class="step-desc">We begin with understanding your vision. Every dream piece starts with a conversation.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Stone Selection</h3>
+          <p class="step-desc">Handpick from our curated collection of certified diamonds and premium gold alloys.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Master Crafting</h3>
+          <p class="step-desc">Our artisans spend hundreds of hours crafting each piece with precision and devotion.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h3 class="step-title">Quality Assurance</h3>
+          <p class="step-desc">Every Aaiku piece undergoes 12-point quality inspection before it reaches your hands.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="testimonials-inner">
+      <div class="testimonials-header">
+        <p class="section-label">Client Stories</p>
+        <h2 class="section-title">Worn with <em>Love</em></h2>
+        <div class="gold-line"></div>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">The engagement ring Aaiku created for me was beyond anything I imagined. My fiancée cried when she saw it. Absolutely flawless craftsmanship.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">R</div>
+            <div>
+              <div class="testi-name">Rohan Mehta</div>
+              <div class="testi-city">Mumbai</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">I've been a client for 8 years. Every piece I own from Aaiku is a treasure. Their bridal set for my daughter's wedding was simply breathtaking.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">P</div>
+            <div>
+              <div class="testi-name">Priya Nair</div>
+              <div class="testi-city">Bangalore</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">The custom necklace they designed for my anniversary is the most beautiful thing I've ever worn. The attention to detail is extraordinary.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">A</div>
+            <div>
+              <div class="testi-name">Ananya Sharma</div>
+              <div class="testi-city">Delhi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <div class="cta-inner">
+      <p class="section-label">Begin Your Journey</p>
+      <h2 class="section-title">Ready to Find Your <em>Perfect Piece?</em></h2>
+      <div class="gold-line" style="margin: 0 auto 32px;"></div>
+      <p>Visit our atelier or reach out to our jewellery consultants. We would be honoured to craft something extraordinary for you.</p>
+      <div class="cta-buttons">
+        <a href="mailto:hello@aaiku.in" class="btn-gold">hello@aaiku.in</a>
+        <a href="tel:+911234567890" class="btn-outline">+91 12345 67890</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="font-size:24px;letter-spacing:8px;">Aaiku</a>
+        <p>Fine gold and diamond jewellery, crafted in India with love, artistry and an unwavering commitment to quality.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Collections</h4>
+        <ul>
+          <li>Solitaire Rings</li>
+          <li>Gold Necklaces</li>
+          <li>Diamond Earrings</li>
+          <li>Gold Bangles</li>
+          <li>Bridal Sets</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li>Our Story</li>
+          <li>Craftsmanship</li>
+          <li>Sustainability</li>
+          <li>Certifications</li>
+          <li>Careers</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul>
+          <li>Mumbai Atelier</li>
+          <li>By Appointment</li>
+          <li>Mon – Sat, 10–7pm</li>
+          <li>hello@aaiku.in</li>
+          <li>+91 12345 67890</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 Aaiku Fine Jewellery. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#" title="Instagram">✦</a>
+        <a href="#" title="Facebook">f</a>
+        <a href="#" title="Pinterest">P</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
