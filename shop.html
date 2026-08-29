@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shop All Jewelry — AAIKU</title>
+<meta name="description" content="Browse the full AAIKU jewelry catalog — mangalsutras, necklaces, rings, bangles, hair accessories and nose pins.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="announce">✨ FREE SHIPPING ON ORDERS ABOVE ₹999 &nbsp;|&nbsp; CASH ON DELIVERY AVAILABLE ✨</div>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">AAIKU<small>JEWELRY</small></a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html" class="active">Shop</a>
+      <a href="shop.html">Collections</a>
+      <a href="index.html#about">About Us</a>
+      <a href="index.html#reviews">Reviews</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="header-icons">
+      <button aria-label="Search" onclick="document.getElementById('searchInput').focus()">🔍</button>
+      <button aria-label="Account">👤</button>
+      <button aria-label="Cart" class="cart-btn">🛍<span class="cart-count">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="shop-header">
+  <h1 class="serif">Shop All Jewelry</h1>
+  <p>Browse AAIKU's full catalog, sourced live from our product listings.</p>
+</div>
+
+<div class="shop-controls">
+  <div class="filter-pills" id="filterPills"></div>
+  <input type="text" id="searchInput" class="shop-search" placeholder="Search products…">
+</div>
+
+<p class="shop-count" id="shopCount"></p>
+<div class="shop-grid" id="shopGrid"></div>
+
+<section class="footer-strip">
+  <div class="footer-strip-inner">
+    <div class="strip-item"><div class="icon">🚚</div><div><h4>Free Shipping</h4><p>On orders above ₹999</p></div></div>
+    <div class="strip-item"><div class="icon">💵</div><div><h4>Cash on Delivery</h4><p>Available all over India</p></div></div>
+    <div class="strip-item"><div class="icon">↩️</div><div><h4>Easy Returns</h4><p>7 days return policy</p></div></div>
+    <div class="strip-item"><div class="icon">🎧</div><div><h4>Support</h4><p>We are here to help you</p></div></div>
+  </div>
+</section>
+<p class="footer-copy">© 2026 AAIKU Jewelry. All rights reserved.</p>
+
+<script>
+let ALL = [];
+let activeCat = new URLSearchParams(location.search).get('cat') || 'All';
+
+function money(n) { return n == null ? '' : '₹' + Math.round(n).toLocaleString('en-IN'); }
+function stars(rating, count) {
+  if (!rating) return '<div class="product-rating">New Arrival</div>';
+  const full = Math.round(rating);
+  return `<div class="product-rating">${'★'.repeat(full)}${'☆'.repeat(5-full)}<span>(${count})</span></div>`;
+}
+
+function render() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  let list = ALL.filter(p => activeCat === 'All' || p.category === activeCat);
+  if (q) list = list.filter(p => p.name.toLowerCase().includes(q));
+
+  document.getElementById('shopCount').textContent = `${list.length} product${list.length !== 1 ? 's' : ''}`;
+
+  const grid = document.getElementById('shopGrid');
+  if (!list.length) {
+    grid.innerHTML = '<p class="empty-state">No products match your search.</p>';
+    return;
+  }
+  grid.innerHTML = list.map(p => `
+    <div class="product-card" id="${p.asin}">
+      <div class="product-media">
+        ${p.discount_percent ? `<span class="discount-badge">-${p.discount_percent}%</span>` : ''}
+        <img src="${p.image}" alt="${p.name.replace(/"/g,'&quot;')}" loading="lazy">
+      </div>
+      <div class="product-name">${p.name}</div>
+      <div class="product-price">${money(p.coupon_price || p.price)}${p.mrp ? `<span class="mrp">${money(p.mrp)}</span>` : ''}</div>
+      ${stars(p.rating, p.review_count)}
+      <a class="buy-btn" href="${p.url}" target="_blank" rel="noopener">VIEW ON AMAZON</a>
+    </div>
+  `).join('');
+}
+
+function renderPills(categories) {
+  const wrap = document.getElementById('filterPills');
+  const cats = ['All', ...categories];
+  wrap.innerHTML = cats.map(c => `<button class="filter-pill ${c === activeCat ? 'active' : ''}" data-cat="${c}">${c}</button>`).join('');
+  wrap.querySelectorAll('.filter-pill').forEach(btn => {
+    btn.onclick = () => {
+      activeCat = btn.dataset.cat;
+      wrap.querySelectorAll('.filter-pill').forEach(b => b.classList.toggle('active', b === btn));
+      render();
+    };
+  });
+}
+
+fetch('products.json').then(r => r.json()).then(data => {
+  ALL = data.products;
+  const categories = [...new Set(ALL.map(p => p.category))];
+  if (!categories.includes(activeCat)) activeCat = 'All';
+  renderPills(categories);
+  render();
+  if (location.hash) {
+    const el = document.getElementById(location.hash.slice(1));
+    if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+  }
+}).catch(() => {
+  document.getElementById('shopGrid').innerHTML = '<p class="empty-state">Unable to load products.json right now.</p>';
+});
+
+document.getElementById('searchInput').addEventListener('input', render);
+</script>
+</body>
+</html>
